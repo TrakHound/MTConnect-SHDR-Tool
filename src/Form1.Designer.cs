@@ -31,24 +31,32 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabControl2 = new System.Windows.Forms.TabControl();
-            this.tabPage3 = new System.Windows.Forms.TabPage();
-            this.sampleValueSendButton = new System.Windows.Forms.Button();
-            this.sampleValueResultTextBox = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.sampleValueDataItemKeyTextBox = new System.Windows.Forms.TextBox();
+            this.dataItemsTreeView = new System.Windows.Forms.TreeView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.dataItemSubTypeLabel = new System.Windows.Forms.Label();
+            this.dataItemSubTypeDescription = new System.Windows.Forms.TextBox();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.dataItemTypeLabel = new System.Windows.Forms.Label();
+            this.dataItemTypeDescriptionTextBox = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.dataSetDataGridView = new System.Windows.Forms.DataGridView();
-            this.keyColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.valueColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.removedColumn = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.dataSetSendButton = new System.Windows.Forms.Button();
-            this.dataSetDataItemKeyTextBox = new System.Windows.Forms.TextBox();
+            this.dataItemSendButton = new System.Windows.Forms.Button();
+            this.sampleValueDataItemKeyTextBox = new System.Windows.Forms.TextBox();
+            this.dataItemValuePanel = new System.Windows.Forms.Panel();
+            this.dataItemValueDescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.dataItemResultComboBox = new System.Windows.Forms.ComboBox();
+            this.dataItemConditionPanel = new System.Windows.Forms.Panel();
+            this.dataItemConditionMessageTextBox = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.dataItemConditionQualifierComboBox = new System.Windows.Forms.ComboBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.dataItemConditionNativeSeverityTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.dataItemConditionLevelDescriptionTextBox = new System.Windows.Forms.TextBox();
+            this.dataItemConditionNativeCodeTextBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.dataItemLevelComboBox = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.assetBodyTextBox = new System.Windows.Forms.RichTextBox();
             this.assetSendButton = new System.Windows.Forms.Button();
@@ -57,214 +65,312 @@
             this.assetIdTextBox = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.httpPortTextBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.connectButton = new System.Windows.Forms.Button();
             this.connectionStatusLabel = new System.Windows.Forms.Label();
-            this.portTextBox = new System.Windows.Forms.TextBox();
+            this.shdrPortTextBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.hostnameTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.outputListBox = new System.Windows.Forms.ListBox();
+            this.disconnectedPanel = new System.Windows.Forms.Panel();
+            this.label7 = new System.Windows.Forms.Label();
+            this.deviceComboBox = new System.Windows.Forms.ComboBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.tabControl2.SuspendLayout();
-            this.tabPage3.SuspendLayout();
-            this.tabPage5.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataSetDataGridView)).BeginInit();
+            this.groupBox2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            this.dataItemValuePanel.SuspendLayout();
+            this.dataItemConditionPanel.SuspendLayout();
             this.tabPage7.SuspendLayout();
             this.panel1.SuspendLayout();
+            this.disconnectedPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage7);
-            this.tabControl1.Location = new System.Drawing.Point(16, 51);
+            this.tabControl1.Location = new System.Drawing.Point(12, 81);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(899, 222);
+            this.tabControl1.Size = new System.Drawing.Size(1087, 311);
             this.tabControl1.TabIndex = 0;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.tabControl2);
+            this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.tabPage1.Controls.Add(this.dataItemsTreeView);
+            this.tabPage1.Controls.Add(this.groupBox2);
+            this.tabPage1.Controls.Add(this.groupBox1);
+            this.tabPage1.Controls.Add(this.label3);
+            this.tabPage1.Controls.Add(this.dataItemSendButton);
+            this.tabPage1.Controls.Add(this.sampleValueDataItemKeyTextBox);
+            this.tabPage1.Controls.Add(this.dataItemValuePanel);
+            this.tabPage1.Controls.Add(this.dataItemConditionPanel);
             this.tabPage1.Location = new System.Drawing.Point(4, 24);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(891, 194);
+            this.tabPage1.Size = new System.Drawing.Size(1079, 283);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Sample";
-            this.tabPage1.UseVisualStyleBackColor = true;
+            this.tabPage1.Text = "DataItem";
             // 
-            // tabControl2
+            // dataItemsTreeView
             // 
-            this.tabControl2.Controls.Add(this.tabPage3);
-            this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Controls.Add(this.tabPage5);
-            this.tabControl2.Controls.Add(this.tabPage6);
-            this.tabControl2.Location = new System.Drawing.Point(0, 0);
-            this.tabControl2.Name = "tabControl2";
-            this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(895, 198);
-            this.tabControl2.TabIndex = 0;
+            this.dataItemsTreeView.Location = new System.Drawing.Point(0, 0);
+            this.dataItemsTreeView.Name = "dataItemsTreeView";
+            this.dataItemsTreeView.Size = new System.Drawing.Size(339, 273);
+            this.dataItemsTreeView.TabIndex = 1;
+            this.dataItemsTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.dataItemsTreeView_AfterSelect);
             // 
-            // tabPage3
+            // groupBox2
             // 
-            this.tabPage3.Controls.Add(this.sampleValueSendButton);
-            this.tabPage3.Controls.Add(this.sampleValueResultTextBox);
-            this.tabPage3.Controls.Add(this.label4);
-            this.tabPage3.Controls.Add(this.sampleValueDataItemKeyTextBox);
-            this.tabPage3.Controls.Add(this.label3);
-            this.tabPage3.Location = new System.Drawing.Point(4, 24);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(887, 170);
-            this.tabPage3.TabIndex = 0;
-            this.tabPage3.Text = "Value";
-            this.tabPage3.UseVisualStyleBackColor = true;
+            this.groupBox2.Controls.Add(this.dataItemSubTypeLabel);
+            this.groupBox2.Controls.Add(this.dataItemSubTypeDescription);
+            this.groupBox2.Location = new System.Drawing.Point(345, 156);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(290, 117);
+            this.groupBox2.TabIndex = 10;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "SubType";
             // 
-            // sampleValueSendButton
+            // dataItemSubTypeLabel
             // 
-            this.sampleValueSendButton.Location = new System.Drawing.Point(15, 130);
-            this.sampleValueSendButton.Name = "sampleValueSendButton";
-            this.sampleValueSendButton.Size = new System.Drawing.Size(75, 23);
-            this.sampleValueSendButton.TabIndex = 4;
-            this.sampleValueSendButton.Text = "Send";
-            this.sampleValueSendButton.UseVisualStyleBackColor = true;
-            this.sampleValueSendButton.Click += new System.EventHandler(this.sampleValueSendButton_Click);
+            this.dataItemSubTypeLabel.AutoSize = true;
+            this.dataItemSubTypeLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dataItemSubTypeLabel.Location = new System.Drawing.Point(6, 19);
+            this.dataItemSubTypeLabel.Name = "dataItemSubTypeLabel";
+            this.dataItemSubTypeLabel.Size = new System.Drawing.Size(40, 15);
+            this.dataItemSubTypeLabel.TabIndex = 7;
+            this.dataItemSubTypeLabel.Text = "label9";
             // 
-            // sampleValueResultTextBox
+            // dataItemSubTypeDescription
             // 
-            this.sampleValueResultTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sampleValueResultTextBox.Location = new System.Drawing.Point(15, 91);
-            this.sampleValueResultTextBox.Name = "sampleValueResultTextBox";
-            this.sampleValueResultTextBox.Size = new System.Drawing.Size(319, 23);
-            this.sampleValueResultTextBox.TabIndex = 3;
+            this.dataItemSubTypeDescription.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.dataItemSubTypeDescription.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataItemSubTypeDescription.Location = new System.Drawing.Point(6, 38);
+            this.dataItemSubTypeDescription.Multiline = true;
+            this.dataItemSubTypeDescription.Name = "dataItemSubTypeDescription";
+            this.dataItemSubTypeDescription.Size = new System.Drawing.Size(278, 73);
+            this.dataItemSubTypeDescription.TabIndex = 8;
             // 
-            // label4
+            // groupBox1
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(15, 73);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(39, 15);
-            this.label4.TabIndex = 2;
-            this.label4.Text = "Result";
+            this.groupBox1.Controls.Add(this.dataItemTypeLabel);
+            this.groupBox1.Controls.Add(this.dataItemTypeDescriptionTextBox);
+            this.groupBox1.Location = new System.Drawing.Point(345, 6);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(290, 144);
+            this.groupBox1.TabIndex = 9;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Type";
             // 
-            // sampleValueDataItemKeyTextBox
+            // dataItemTypeLabel
             // 
-            this.sampleValueDataItemKeyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.sampleValueDataItemKeyTextBox.Location = new System.Drawing.Point(15, 33);
-            this.sampleValueDataItemKeyTextBox.Name = "sampleValueDataItemKeyTextBox";
-            this.sampleValueDataItemKeyTextBox.Size = new System.Drawing.Size(319, 23);
-            this.sampleValueDataItemKeyTextBox.TabIndex = 1;
+            this.dataItemTypeLabel.AutoSize = true;
+            this.dataItemTypeLabel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.dataItemTypeLabel.Location = new System.Drawing.Point(6, 19);
+            this.dataItemTypeLabel.Name = "dataItemTypeLabel";
+            this.dataItemTypeLabel.Size = new System.Drawing.Size(40, 15);
+            this.dataItemTypeLabel.TabIndex = 5;
+            this.dataItemTypeLabel.Text = "label9";
+            // 
+            // dataItemTypeDescriptionTextBox
+            // 
+            this.dataItemTypeDescriptionTextBox.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.dataItemTypeDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataItemTypeDescriptionTextBox.Location = new System.Drawing.Point(6, 37);
+            this.dataItemTypeDescriptionTextBox.Multiline = true;
+            this.dataItemTypeDescriptionTextBox.Name = "dataItemTypeDescriptionTextBox";
+            this.dataItemTypeDescriptionTextBox.Size = new System.Drawing.Size(278, 101);
+            this.dataItemTypeDescriptionTextBox.TabIndex = 6;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(15, 15);
+            this.label3.Location = new System.Drawing.Point(660, 6);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(145, 15);
             this.label3.TabIndex = 0;
             this.label3.Text = "DataItemKey (ID or Name)";
             // 
-            // tabPage4
+            // dataItemSendButton
             // 
-            this.tabPage4.Location = new System.Drawing.Point(4, 24);
-            this.tabPage4.Name = "tabPage4";
-            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(887, 170);
-            this.tabPage4.TabIndex = 1;
-            this.tabPage4.Text = "TimeSeries";
-            this.tabPage4.UseVisualStyleBackColor = true;
+            this.dataItemSendButton.Location = new System.Drawing.Point(988, 245);
+            this.dataItemSendButton.Name = "dataItemSendButton";
+            this.dataItemSendButton.Size = new System.Drawing.Size(85, 28);
+            this.dataItemSendButton.TabIndex = 4;
+            this.dataItemSendButton.Text = "Send";
+            this.dataItemSendButton.UseVisualStyleBackColor = true;
+            this.dataItemSendButton.Click += new System.EventHandler(this.sampleValueSendButton_Click);
             // 
-            // tabPage5
+            // sampleValueDataItemKeyTextBox
             // 
-            this.tabPage5.Controls.Add(this.dataSetDataGridView);
-            this.tabPage5.Controls.Add(this.dataSetSendButton);
-            this.tabPage5.Controls.Add(this.dataSetDataItemKeyTextBox);
-            this.tabPage5.Controls.Add(this.label8);
-            this.tabPage5.Location = new System.Drawing.Point(4, 24);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Size = new System.Drawing.Size(887, 170);
-            this.tabPage5.TabIndex = 2;
-            this.tabPage5.Text = "DataSet";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.sampleValueDataItemKeyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.sampleValueDataItemKeyTextBox.Location = new System.Drawing.Point(660, 23);
+            this.sampleValueDataItemKeyTextBox.Name = "sampleValueDataItemKeyTextBox";
+            this.sampleValueDataItemKeyTextBox.Size = new System.Drawing.Size(404, 23);
+            this.sampleValueDataItemKeyTextBox.TabIndex = 1;
             // 
-            // dataSetDataGridView
+            // dataItemValuePanel
             // 
-            this.dataSetDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataSetDataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.keyColumn,
-            this.valueColumn,
-            this.removedColumn});
-            this.dataSetDataGridView.Location = new System.Drawing.Point(363, 11);
-            this.dataSetDataGridView.Name = "dataSetDataGridView";
-            this.dataSetDataGridView.RowTemplate.Height = 25;
-            this.dataSetDataGridView.Size = new System.Drawing.Size(518, 153);
-            this.dataSetDataGridView.TabIndex = 16;
+            this.dataItemValuePanel.Controls.Add(this.dataItemValueDescriptionTextBox);
+            this.dataItemValuePanel.Controls.Add(this.label4);
+            this.dataItemValuePanel.Controls.Add(this.dataItemResultComboBox);
+            this.dataItemValuePanel.Location = new System.Drawing.Point(655, 50);
+            this.dataItemValuePanel.Name = "dataItemValuePanel";
+            this.dataItemValuePanel.Size = new System.Drawing.Size(410, 187);
+            this.dataItemValuePanel.TabIndex = 13;
             // 
-            // keyColumn
+            // dataItemValueDescriptionTextBox
             // 
-            this.keyColumn.HeaderText = "Key";
-            this.keyColumn.Name = "keyColumn";
-            this.keyColumn.Width = 150;
+            this.dataItemValueDescriptionTextBox.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.dataItemValueDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataItemValueDescriptionTextBox.Location = new System.Drawing.Point(5, 52);
+            this.dataItemValueDescriptionTextBox.Multiline = true;
+            this.dataItemValueDescriptionTextBox.Name = "dataItemValueDescriptionTextBox";
+            this.dataItemValueDescriptionTextBox.Size = new System.Drawing.Size(404, 132);
+            this.dataItemValueDescriptionTextBox.TabIndex = 12;
             // 
-            // valueColumn
+            // label4
             // 
-            this.valueColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.valueColumn.HeaderText = "Value";
-            this.valueColumn.Name = "valueColumn";
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(5, 5);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(39, 15);
+            this.label4.TabIndex = 2;
+            this.label4.Text = "Result";
             // 
-            // removedColumn
+            // dataItemResultComboBox
             // 
-            this.removedColumn.HeaderText = "Removed";
-            this.removedColumn.Name = "removedColumn";
+            this.dataItemResultComboBox.FormattingEnabled = true;
+            this.dataItemResultComboBox.Location = new System.Drawing.Point(5, 23);
+            this.dataItemResultComboBox.Name = "dataItemResultComboBox";
+            this.dataItemResultComboBox.Size = new System.Drawing.Size(404, 23);
+            this.dataItemResultComboBox.TabIndex = 11;
+            this.dataItemResultComboBox.SelectedIndexChanged += new System.EventHandler(this.dataItemResultComboBox_SelectedIndexChanged);
             // 
-            // dataSetSendButton
+            // dataItemConditionPanel
             // 
-            this.dataSetSendButton.Location = new System.Drawing.Point(14, 58);
-            this.dataSetSendButton.Name = "dataSetSendButton";
-            this.dataSetSendButton.Size = new System.Drawing.Size(75, 23);
-            this.dataSetSendButton.TabIndex = 9;
-            this.dataSetSendButton.Text = "Send";
-            this.dataSetSendButton.UseVisualStyleBackColor = true;
-            this.dataSetSendButton.Click += new System.EventHandler(this.dataSetSendButton_Click);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemConditionMessageTextBox);
+            this.dataItemConditionPanel.Controls.Add(this.label13);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemConditionQualifierComboBox);
+            this.dataItemConditionPanel.Controls.Add(this.label12);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemConditionNativeSeverityTextBox);
+            this.dataItemConditionPanel.Controls.Add(this.label11);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemConditionLevelDescriptionTextBox);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemConditionNativeCodeTextBox);
+            this.dataItemConditionPanel.Controls.Add(this.label10);
+            this.dataItemConditionPanel.Controls.Add(this.dataItemLevelComboBox);
+            this.dataItemConditionPanel.Controls.Add(this.label8);
+            this.dataItemConditionPanel.Location = new System.Drawing.Point(655, 50);
+            this.dataItemConditionPanel.Name = "dataItemConditionPanel";
+            this.dataItemConditionPanel.Size = new System.Drawing.Size(412, 187);
+            this.dataItemConditionPanel.TabIndex = 14;
             // 
-            // dataSetDataItemKeyTextBox
+            // dataItemConditionMessageTextBox
             // 
-            this.dataSetDataItemKeyTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.dataSetDataItemKeyTextBox.Location = new System.Drawing.Point(14, 29);
-            this.dataSetDataItemKeyTextBox.Name = "dataSetDataItemKeyTextBox";
-            this.dataSetDataItemKeyTextBox.Size = new System.Drawing.Size(319, 23);
-            this.dataSetDataItemKeyTextBox.TabIndex = 6;
+            this.dataItemConditionMessageTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dataItemConditionMessageTextBox.Location = new System.Drawing.Point(93, 148);
+            this.dataItemConditionMessageTextBox.Name = "dataItemConditionMessageTextBox";
+            this.dataItemConditionMessageTextBox.Size = new System.Drawing.Size(316, 23);
+            this.dataItemConditionMessageTextBox.TabIndex = 10;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(5, 150);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(53, 15);
+            this.label13.TabIndex = 9;
+            this.label13.Text = "Message";
+            // 
+            // dataItemConditionQualifierComboBox
+            // 
+            this.dataItemConditionQualifierComboBox.FormattingEnabled = true;
+            this.dataItemConditionQualifierComboBox.Items.AddRange(new object[] {
+            "HIGH",
+            "LOW"});
+            this.dataItemConditionQualifierComboBox.Location = new System.Drawing.Point(93, 119);
+            this.dataItemConditionQualifierComboBox.Name = "dataItemConditionQualifierComboBox";
+            this.dataItemConditionQualifierComboBox.Size = new System.Drawing.Size(316, 23);
+            this.dataItemConditionQualifierComboBox.TabIndex = 8;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(5, 122);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(52, 15);
+            this.label12.TabIndex = 7;
+            this.label12.Text = "Qualifier";
+            // 
+            // dataItemConditionNativeSeverityTextBox
+            // 
+            this.dataItemConditionNativeSeverityTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dataItemConditionNativeSeverityTextBox.Location = new System.Drawing.Point(93, 90);
+            this.dataItemConditionNativeSeverityTextBox.Name = "dataItemConditionNativeSeverityTextBox";
+            this.dataItemConditionNativeSeverityTextBox.Size = new System.Drawing.Size(316, 23);
+            this.dataItemConditionNativeSeverityTextBox.TabIndex = 6;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(5, 92);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(82, 15);
+            this.label11.TabIndex = 5;
+            this.label11.Text = "NativeSeverity";
+            // 
+            // dataItemConditionLevelDescriptionTextBox
+            // 
+            this.dataItemConditionLevelDescriptionTextBox.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.dataItemConditionLevelDescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.dataItemConditionLevelDescriptionTextBox.Location = new System.Drawing.Point(93, 32);
+            this.dataItemConditionLevelDescriptionTextBox.Name = "dataItemConditionLevelDescriptionTextBox";
+            this.dataItemConditionLevelDescriptionTextBox.Size = new System.Drawing.Size(316, 16);
+            this.dataItemConditionLevelDescriptionTextBox.TabIndex = 4;
+            // 
+            // dataItemConditionNativeCodeTextBox
+            // 
+            this.dataItemConditionNativeCodeTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dataItemConditionNativeCodeTextBox.Location = new System.Drawing.Point(93, 59);
+            this.dataItemConditionNativeCodeTextBox.Name = "dataItemConditionNativeCodeTextBox";
+            this.dataItemConditionNativeCodeTextBox.Size = new System.Drawing.Size(316, 23);
+            this.dataItemConditionNativeCodeTextBox.TabIndex = 3;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(5, 61);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(69, 15);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "NativeCode";
+            // 
+            // dataItemLevelComboBox
+            // 
+            this.dataItemLevelComboBox.FormattingEnabled = true;
+            this.dataItemLevelComboBox.Items.AddRange(new object[] {
+            "NORMAL",
+            "WARNING",
+            "FAULT",
+            "UNAVAILABLE"});
+            this.dataItemLevelComboBox.Location = new System.Drawing.Point(93, 3);
+            this.dataItemLevelComboBox.Name = "dataItemLevelComboBox";
+            this.dataItemLevelComboBox.Size = new System.Drawing.Size(316, 23);
+            this.dataItemLevelComboBox.TabIndex = 1;
+            this.dataItemLevelComboBox.SelectedIndexChanged += new System.EventHandler(this.dataItemLevelComboBox_SelectedIndexChanged);
             // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(14, 11);
+            this.label8.Location = new System.Drawing.Point(5, 7);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(145, 15);
-            this.label8.TabIndex = 5;
-            this.label8.Text = "DataItemKey (ID or Name)";
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.Location = new System.Drawing.Point(4, 24);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Size = new System.Drawing.Size(887, 170);
-            this.tabPage6.TabIndex = 3;
-            this.tabPage6.Text = "Table";
-            this.tabPage6.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 24);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(891, 194);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Event";
-            this.tabPage2.UseVisualStyleBackColor = true;
+            this.label8.Size = new System.Drawing.Size(34, 15);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "Level";
             // 
             // tabPage7
             // 
@@ -276,7 +382,7 @@
             this.tabPage7.Controls.Add(this.label6);
             this.tabPage7.Location = new System.Drawing.Point(4, 24);
             this.tabPage7.Name = "tabPage7";
-            this.tabPage7.Size = new System.Drawing.Size(891, 194);
+            this.tabPage7.Size = new System.Drawing.Size(1079, 283);
             this.tabPage7.TabIndex = 2;
             this.tabPage7.Text = "Asset";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -336,16 +442,36 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.httpPortTextBox);
+            this.panel1.Controls.Add(this.label9);
             this.panel1.Controls.Add(this.connectButton);
             this.panel1.Controls.Add(this.connectionStatusLabel);
-            this.panel1.Controls.Add(this.portTextBox);
+            this.panel1.Controls.Add(this.shdrPortTextBox);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.hostnameTextBox);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(16, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(895, 33);
+            this.panel1.Size = new System.Drawing.Size(1083, 33);
             this.panel1.TabIndex = 1;
+            // 
+            // httpPortTextBox
+            // 
+            this.httpPortTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.httpPortTextBox.Location = new System.Drawing.Point(531, 5);
+            this.httpPortTextBox.Name = "httpPortTextBox";
+            this.httpPortTextBox.Size = new System.Drawing.Size(100, 23);
+            this.httpPortTextBox.TabIndex = 7;
+            this.httpPortTextBox.Text = "5000";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(465, 9);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(60, 15);
+            this.label9.TabIndex = 6;
+            this.label9.Text = "HTTP Port";
             // 
             // connectButton
             // 
@@ -359,30 +485,32 @@
             // 
             // connectionStatusLabel
             // 
+            this.connectionStatusLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.connectionStatusLabel.AutoSize = true;
-            this.connectionStatusLabel.Location = new System.Drawing.Point(788, 7);
+            this.connectionStatusLabel.Location = new System.Drawing.Point(965, 10);
             this.connectionStatusLabel.Name = "connectionStatusLabel";
             this.connectionStatusLabel.Size = new System.Drawing.Size(104, 15);
             this.connectionStatusLabel.TabIndex = 4;
             this.connectionStatusLabel.Text = "Connection Status";
+            this.connectionStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // portTextBox
+            // shdrPortTextBox
             // 
-            this.portTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.portTextBox.Location = new System.Drawing.Point(503, 5);
-            this.portTextBox.Name = "portTextBox";
-            this.portTextBox.Size = new System.Drawing.Size(100, 23);
-            this.portTextBox.TabIndex = 3;
-            this.portTextBox.Text = "7878";
+            this.shdrPortTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.shdrPortTextBox.Location = new System.Drawing.Point(722, 5);
+            this.shdrPortTextBox.Name = "shdrPortTextBox";
+            this.shdrPortTextBox.Size = new System.Drawing.Size(100, 23);
+            this.shdrPortTextBox.TabIndex = 3;
+            this.shdrPortTextBox.Text = "7878";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(468, 7);
+            this.label2.Location = new System.Drawing.Point(654, 9);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(29, 15);
+            this.label2.Size = new System.Drawing.Size(62, 15);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Port";
+            this.label2.Text = "SHDR Port";
             // 
             // hostnameTextBox
             // 
@@ -407,36 +535,72 @@
             this.outputListBox.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.outputListBox.FormattingEnabled = true;
             this.outputListBox.ItemHeight = 15;
-            this.outputListBox.Location = new System.Drawing.Point(16, 279);
+            this.outputListBox.Location = new System.Drawing.Point(4, 349);
             this.outputListBox.Name = "outputListBox";
-            this.outputListBox.SelectionMode = System.Windows.Forms.SelectionMode.None;
-            this.outputListBox.Size = new System.Drawing.Size(895, 154);
+            this.outputListBox.Size = new System.Drawing.Size(1083, 124);
             this.outputListBox.TabIndex = 2;
+            // 
+            // disconnectedPanel
+            // 
+            this.disconnectedPanel.Controls.Add(this.outputListBox);
+            this.disconnectedPanel.Controls.Add(this.label7);
+            this.disconnectedPanel.Location = new System.Drawing.Point(12, 49);
+            this.disconnectedPanel.Name = "disconnectedPanel";
+            this.disconnectedPanel.Size = new System.Drawing.Size(1087, 473);
+            this.disconnectedPanel.TabIndex = 3;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.ForeColor = System.Drawing.SystemColors.ControlDark;
+            this.label7.Location = new System.Drawing.Point(462, 167);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(177, 21);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "Not Connected to Agent";
+            // 
+            // deviceComboBox
+            // 
+            this.deviceComboBox.FormattingEnabled = true;
+            this.deviceComboBox.Location = new System.Drawing.Point(17, 52);
+            this.deviceComboBox.Name = "deviceComboBox";
+            this.deviceComboBox.Size = new System.Drawing.Size(164, 23);
+            this.deviceComboBox.TabIndex = 1;
+            this.deviceComboBox.SelectedIndexChanged += new System.EventHandler(this.deviceComboBox_SelectedIndexChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(925, 446);
-            this.Controls.Add(this.outputListBox);
+            this.ClientSize = new System.Drawing.Size(1111, 534);
+            this.Controls.Add(this.deviceComboBox);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.disconnectedPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "TrakHound MTConnect SHDR Tool";
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
-            this.tabControl2.ResumeLayout(false);
-            this.tabPage3.ResumeLayout(false);
-            this.tabPage3.PerformLayout();
-            this.tabPage5.ResumeLayout(false);
-            this.tabPage5.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataSetDataGridView)).EndInit();
+            this.tabPage1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            this.dataItemValuePanel.ResumeLayout(false);
+            this.dataItemValuePanel.PerformLayout();
+            this.dataItemConditionPanel.ResumeLayout(false);
+            this.dataItemConditionPanel.PerformLayout();
             this.tabPage7.ResumeLayout(false);
             this.tabPage7.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            this.disconnectedPanel.ResumeLayout(false);
+            this.disconnectedPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -445,20 +609,13 @@
 
         private TabControl tabControl1;
         private TabPage tabPage1;
-        private TabControl tabControl2;
-        private TabPage tabPage3;
-        private TabPage tabPage4;
-        private TabPage tabPage5;
-        private TabPage tabPage6;
-        private TabPage tabPage2;
         private Panel panel1;
-        private TextBox portTextBox;
+        private TextBox shdrPortTextBox;
         private Label label2;
         private TextBox hostnameTextBox;
         private Label label1;
         private Label connectionStatusLabel;
-        private Button sampleValueSendButton;
-        private TextBox sampleValueResultTextBox;
+        private Button dataItemSendButton;
         private Label label4;
         private TextBox sampleValueDataItemKeyTextBox;
         private Label label3;
@@ -471,12 +628,32 @@
         private Label label5;
         private TextBox assetIdTextBox;
         private Label label6;
-        private Button dataSetSendButton;
-        private TextBox dataSetDataItemKeyTextBox;
+        private Panel disconnectedPanel;
+        private Label label7;
+        private TreeView dataItemsTreeView;
+        private ComboBox deviceComboBox;
+        private TextBox dataItemTypeDescriptionTextBox;
+        private Label dataItemTypeLabel;
+        private TextBox dataItemSubTypeDescription;
+        private Label dataItemSubTypeLabel;
+        private GroupBox groupBox2;
+        private GroupBox groupBox1;
+        private TextBox httpPortTextBox;
+        private Label label9;
+        private ComboBox dataItemResultComboBox;
+        private TextBox dataItemValueDescriptionTextBox;
+        private Panel dataItemValuePanel;
+        private Panel dataItemConditionPanel;
+        private TextBox dataItemConditionMessageTextBox;
+        private Label label13;
+        private ComboBox dataItemConditionQualifierComboBox;
+        private Label label12;
+        private TextBox dataItemConditionNativeSeverityTextBox;
+        private Label label11;
+        private TextBox dataItemConditionLevelDescriptionTextBox;
+        private TextBox dataItemConditionNativeCodeTextBox;
+        private Label label10;
+        private ComboBox dataItemLevelComboBox;
         private Label label8;
-        private DataGridView dataSetDataGridView;
-        private DataGridViewTextBoxColumn keyColumn;
-        private DataGridViewTextBoxColumn valueColumn;
-        private DataGridViewCheckBoxColumn removedColumn;
     }
 }
