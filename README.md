@@ -17,4 +17,4 @@ Connect to an MTConnect Agent using:
 - Http Port (ex. 5000)
 - SHDR Port (ex. 7878)
 
-![Connection_Image](img/Screenshot_2022-11-27-025109.png)
+![ConnectionImage](img/Screenshot_2022-11-27-025109.png)
