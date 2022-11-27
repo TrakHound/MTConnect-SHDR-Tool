@@ -1,4 +1,7 @@
-﻿namespace MTConnect.Applications.SHDR_Tool
+﻿using System.Windows;
+using System.Windows.Forms;
+
+namespace MTConnect.Applications.SHDR_Tool
 {
     partial class EditTableDialog
 {

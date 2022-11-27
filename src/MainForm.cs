@@ -8,11 +8,19 @@ using MTConnect.Observations;
 using MTConnect.Observations.Events.Values;
 using MTConnect.Shdr;
 using System.Text;
+using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Linq;
+using System;
+using System.Drawing;
 
 namespace MTConnect.Applications.SHDR_Tool
 {
     public partial class MainForm : Form
     {
+        delegate void AgentConnectionDelegate(object sender, string message);
+        delegate void AdapterLineDelegate(object sender, AdapterEventArgs args);
+
         bool connected;
         MTConnectClient _client;
         ShdrAdapter _adapter;
@@ -184,40 +192,49 @@ namespace MTConnect.Applications.SHDR_Tool
 
         private void AgentConnected(object sender, string hostname)
         {
-            connectionStatusLabel.Invoke(() =>
+            if (InvokeRequired)
             {
-                var hostname = hostnameTextBox.Text;
-                var port = httpPortTextBox.Text.ToInt();
+                this.Invoke(new AgentConnectionDelegate(AgentConnected), sender, hostname);
+                return;
+            }
 
-                _client = new MTConnectClient($"{hostname}:{port}");
-                LoadDevices();
+            var host = hostnameTextBox.Text;
+            var port = httpPortTextBox.Text.ToInt();
 
-                connectionStatusLabel.Text = "Connected";
-                connectButton.Text = "Disconnect";
-                disconnectedPanel.SendToBack();
-                connected = true;
-            });
+            _client = new MTConnectClient($"{host}:{port}");
+            LoadDevices();
+
+            connectionStatusLabel.Text = "Connected";
+            connectButton.Text = "Disconnect";
+            disconnectedPanel.SendToBack();
+            connected = true;
         }
 
         private void AgentDisonnected(object sender, string hostname)
         {
-            connectionStatusLabel.Invoke(() =>
+            if (InvokeRequired)
             {
-                if (_client != null) _client.Stop();
+                this.Invoke(new AgentConnectionDelegate(AgentDisonnected), sender, hostname);
+                return;
+            }
 
-                connectionStatusLabel.Text = "Disconnected";
-                connectButton.Text = "Connect";
-                disconnectedPanel.BringToFront();
-                connected = false;
-            });
+            if (_client != null) _client.Stop();
+
+            connectionStatusLabel.Text = "Disconnected";
+            connectButton.Text = "Connect";
+            disconnectedPanel.BringToFront();
+            connected = false;
         }
 
         private void AdapterLineSent(object sender, AdapterEventArgs args)
         {
-            connectionStatusLabel.Invoke(() =>
+            if (InvokeRequired)
             {
-                outputListBox.Items.Insert(0, args.Message);
-            });
+                this.Invoke(new AdapterLineDelegate(AdapterLineSent), sender, args);
+                return;
+            }
+
+            outputListBox.Items.Insert(0, args.Message);
         }
 
 
@@ -424,7 +441,7 @@ namespace MTConnect.Applications.SHDR_Tool
             // TimeSeries
             dataItemTimeSeriesDataGridView.Rows.Clear();
 
-            var dataItem = _dataItems.GetValueOrDefault(dataItemId);
+            _dataItems.TryGetValue(dataItemId, out var dataItem);
             if (dataItem != null)
             {
                 _selectedDataItem = dataItem;
@@ -514,53 +531,53 @@ namespace MTConnect.Applications.SHDR_Tool
         {
             switch (type.ToUnderscoreUpper())
             {
-                case ActuatorStateDataItem.TypeId: return Enum.GetNames<ActuatorState>();
-                case AvailabilityDataItem.TypeId: return Enum.GetNames<Availability>();
-                case AxisCouplingDataItem.TypeId: return Enum.GetNames<AxisCoupling>();
-                case AxisInterlockDataItem.TypeId: return Enum.GetNames<AxisInterlock>();
-                case AxisStateDataItem.TypeId: return Enum.GetNames<AxisState>();
-                case ChuckInterlockDataItem.TypeId: return Enum.GetNames<ChuckInterlock>();
-                case ChuckStateDataItem.TypeId: return Enum.GetNames<ChuckState>();
+                case ActuatorStateDataItem.TypeId: return Enum.GetNames(typeof(ActuatorState));
+                case AvailabilityDataItem.TypeId: return Enum.GetNames(typeof(Availability));
+                case AxisCouplingDataItem.TypeId: return Enum.GetNames(typeof(AxisCoupling));
+                case AxisInterlockDataItem.TypeId: return Enum.GetNames(typeof(AxisInterlock));
+                case AxisStateDataItem.TypeId: return Enum.GetNames(typeof(AxisState));
+                case ChuckInterlockDataItem.TypeId: return Enum.GetNames(typeof(ChuckInterlock));
+                case ChuckStateDataItem.TypeId: return Enum.GetNames(typeof(ChuckState));
                 case CompositionStateDataItem.TypeId:
 
                     switch (subType.ToUnderscoreUpper().ConvertEnum<CompositionStateDataItem.SubTypes>())
                     {
-                        case CompositionStateDataItem.SubTypes.ACTION: return Enum.GetNames<CompositionActionState>();
-                        case CompositionStateDataItem.SubTypes.LATERAL: return Enum.GetNames<CompositionLateralState>();
-                        case CompositionStateDataItem.SubTypes.MOTION: return Enum.GetNames<CompositionMotionState>();
-                        case CompositionStateDataItem.SubTypes.SWITCHED: return Enum.GetNames<CompositionSwitchedState>();
-                        case CompositionStateDataItem.SubTypes.VERTICAL: return Enum.GetNames<CompositionVerticalState>();
+                        case CompositionStateDataItem.SubTypes.ACTION: return Enum.GetNames(typeof(CompositionActionState));
+                        case CompositionStateDataItem.SubTypes.LATERAL: return Enum.GetNames(typeof(CompositionLateralState));
+                        case CompositionStateDataItem.SubTypes.MOTION: return Enum.GetNames(typeof(CompositionMotionState));
+                        case CompositionStateDataItem.SubTypes.SWITCHED: return Enum.GetNames(typeof(CompositionSwitchedState));
+                        case CompositionStateDataItem.SubTypes.VERTICAL: return Enum.GetNames(typeof(CompositionVerticalState));
                     }
                     break;
-                case ConnectionStatusDataItem.TypeId: return Enum.GetNames<ConnectionStatus>();
-                case ControllerModeDataItem.TypeId: return Enum.GetNames<ControllerMode>();
-                case ControllerModeOverrideDataItem.TypeId: return Enum.GetNames<ControllerModeOverrideValue>();
+                case ConnectionStatusDataItem.TypeId: return Enum.GetNames(typeof(ConnectionStatus));
+                case ControllerModeDataItem.TypeId: return Enum.GetNames(typeof(ControllerMode));
+                case ControllerModeOverrideDataItem.TypeId: return Enum.GetNames(typeof(ControllerModeOverrideValue));
                 case DirectionDataItem.TypeId:
                     switch (subType.ToUnderscoreUpper().ConvertEnum<DirectionDataItem.SubTypes>())
                     {
-                        case DirectionDataItem.SubTypes.LINEAR: return Enum.GetNames<LinearDirection>();
-                        case DirectionDataItem.SubTypes.ROTARY: return Enum.GetNames<RotaryDirection>();
+                        case DirectionDataItem.SubTypes.LINEAR: return Enum.GetNames(typeof(LinearDirection));
+                        case DirectionDataItem.SubTypes.ROTARY: return Enum.GetNames(typeof(RotaryDirection));
                     }
                     break;
-                case DoorStateDataItem.TypeId: return Enum.GetNames<DoorState>();
-                case EmergencyStopDataItem.TypeId: return Enum.GetNames<EmergencyStop>();
-                case EndOfBarDataItem.TypeId: return Enum.GetNames<EndOfBar>();
-                case EquipmentModeDataItem.TypeId: return Enum.GetNames<EquipmentMode>();
-                case ExecutionDataItem.TypeId: return Enum.GetNames<Execution>();
-                case FunctionalModeDataItem.TypeId: return Enum.GetNames<FunctionalMode>();
-                case InterfaceStateDataItem.TypeId: return Enum.GetNames<InterfaceState>();
-                case LockStateDataItem.TypeId: return Enum.GetNames<LockState>();
-                case PartDetectDataItem.TypeId: return Enum.GetNames<PartDetect>();
-                case PartProcessingStateDataItem.TypeId: return Enum.GetNames<PartProcessingState>();
-                case PartStatusDataItem.TypeId: return Enum.GetNames<PartStatus>();
-                case PathModeDataItem.TypeId: return Enum.GetNames<PathMode>();
-                case PowerStateDataItem.TypeId: return Enum.GetNames<MTConnect.Observations.Events.Values.PowerState>();
-                case ProcessStateDataItem.TypeId: return Enum.GetNames<ProcessState>();
-                case ProgramLocationTypeDataItem.TypeId: return Enum.GetNames<ProgramLocationType>();
-                case RotaryModeDataItem.TypeId: return Enum.GetNames<RotaryMode>();
-                case SpindleInterlockDataItem.TypeId: return Enum.GetNames<SpindleInterlock>();
-                case ValveStateDataItem.TypeId: return Enum.GetNames<ValveState>();
-                case WaitStateDataItem.TypeId: return Enum.GetNames<WaitState>();
+                case DoorStateDataItem.TypeId: return Enum.GetNames(typeof(DoorState));
+                case EmergencyStopDataItem.TypeId: return Enum.GetNames(typeof(EmergencyStop));
+                case EndOfBarDataItem.TypeId: return Enum.GetNames(typeof(EndOfBar));
+                case EquipmentModeDataItem.TypeId: return Enum.GetNames(typeof(EquipmentMode));
+                case ExecutionDataItem.TypeId: return Enum.GetNames(typeof(Execution));
+                case FunctionalModeDataItem.TypeId: return Enum.GetNames(typeof(FunctionalMode));
+                case InterfaceStateDataItem.TypeId: return Enum.GetNames(typeof(InterfaceState));
+                case LockStateDataItem.TypeId: return Enum.GetNames(typeof(LockState));
+                case PartDetectDataItem.TypeId: return Enum.GetNames(typeof(PartDetect));
+                case PartProcessingStateDataItem.TypeId: return Enum.GetNames(typeof(PartProcessingState));
+                case PartStatusDataItem.TypeId: return Enum.GetNames(typeof(PartStatus));
+                case PathModeDataItem.TypeId: return Enum.GetNames(typeof(PathMode));
+                case PowerStateDataItem.TypeId: return Enum.GetNames(typeof(MTConnect.Observations.Events.Values.PowerState));
+                case ProcessStateDataItem.TypeId: return Enum.GetNames(typeof(ProcessState));
+                case ProgramLocationTypeDataItem.TypeId: return Enum.GetNames(typeof(ProgramLocationType));
+                case RotaryModeDataItem.TypeId: return Enum.GetNames(typeof(RotaryMode));
+                case SpindleInterlockDataItem.TypeId: return Enum.GetNames(typeof(SpindleInterlock));
+                case ValveStateDataItem.TypeId: return Enum.GetNames(typeof(ValveState));
+                case WaitStateDataItem.TypeId: return Enum.GetNames(typeof(WaitState));
             }
 
             return null;

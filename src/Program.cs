@@ -1,3 +1,6 @@
+using System;
+using System.Windows.Forms;
+
 namespace MTConnect.Applications.SHDR_Tool
 {
     internal static class Program
@@ -8,7 +11,9 @@ namespace MTConnect.Applications.SHDR_Tool
         [STAThread]
         static void Main()
         {
+#if NET5_0_OR_GREATER
             ApplicationConfiguration.Initialize();
+#endif
 
             var mainForm = new MainForm();
             MainForm = mainForm;
