@@ -1,18 +1,17 @@
-using MTConnect;
 using MTConnect.Adapters.Shdr;
 using MTConnect.Clients.Rest;
 using MTConnect.Devices;
+using MTConnect.Devices.DataItems;
 using MTConnect.Devices.DataItems.Events;
 using MTConnect.Formatters;
 using MTConnect.Observations;
 using MTConnect.Observations.Events.Values;
 using MTConnect.Shdr;
 using System.Text;
-using System.Windows.Forms;
 
-namespace WinFormsApp2
+namespace MTConnect.Applications.SHDR_Tool
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         bool connected;
         MTConnectClient _client;
@@ -22,7 +21,7 @@ namespace WinFormsApp2
         IDataItem _selectedDataItem;
 
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
 
@@ -33,15 +32,22 @@ namespace WinFormsApp2
         private async void LoadDevices()
         {
             deviceComboBox.Items.Clear();
+            dataItemNotSelectedPanel.BringToFront();
 
             if (_client != null)
             {
                 var devices = _client.GetProbe()?.Devices;
                 if (!devices.IsNullOrEmpty())
                 {
-                    foreach (var device in devices)
+                    var x = devices.Where(o => o.Type == Device.TypeId);
+                    if (!x.IsNullOrEmpty())
                     {
-                        deviceComboBox.Items.Add(device.Name);
+                        foreach (var device in x)
+                        {
+                            deviceComboBox.Items.Add(device.Name);
+                        }
+
+                        deviceComboBox.SelectedIndex = 0;
                     }
                 }
             }
@@ -52,6 +58,7 @@ namespace WinFormsApp2
             dataItemsTreeView.Nodes.Clear();
             _device = null;
             _dataItems.Clear();
+            dataItemNotSelectedPanel.BringToFront();
 
             if (_client != null)
             {
@@ -220,17 +227,22 @@ namespace WinFormsApp2
             {
                 switch (_selectedDataItem.Representation)
                 {
-                    case MTConnect.Devices.DataItems.DataItemRepresentation.VALUE:
+                    case DataItemRepresentation.VALUE:
 
-                        if (_selectedDataItem.Category == MTConnect.Devices.DataItems.DataItemCategory.CONDITION)
-                        {
-                            SendConditionDataItem();
-                        }
-                        else
-                        {
-                            SendValueDataItem();
-                        }
+                        if (_selectedDataItem.Category == DataItemCategory.CONDITION) SendConditionDataItem();
+                        else SendValueDataItem();     
+                        break;
 
+                    case DataItemRepresentation.DATA_SET:
+                        SendDataSetDataItem();
+                        break;
+
+                    case DataItemRepresentation.TABLE:
+                        SendTableDataItem();
+                        break;
+
+                    case DataItemRepresentation.TIME_SERIES:
+                        SendTimeSeriesDataItem();
                         break;
                 }
             }
@@ -251,7 +263,7 @@ namespace WinFormsApp2
             var condition = new ShdrCondition(dataItemKey);
 
             var faultState = new ShdrFaultState();
-            faultState.Level = dataItemLevelComboBox.Text.ConvertEnum<ConditionLevel>();
+            faultState.Level = dataItemConditionLevelComboBox.Text.ConvertEnum<ConditionLevel>();
             faultState.NativeCode = dataItemConditionNativeCodeTextBox.Text;
             faultState.NativeSeverity = dataItemConditionNativeSeverityTextBox.Text;
             faultState.Qualifier = dataItemConditionQualifierComboBox.Text.ConvertEnum<ConditionQualifier>();
@@ -263,10 +275,96 @@ namespace WinFormsApp2
             _adapter.SendCurrent();
         }
 
+        private void SendDataSetDataItem()
+        {
+            var dataItemKey = sampleValueDataItemKeyTextBox.Text;
+
+            var entries = new List<ShdrDataSetEntry>();
+            var m = dataItemDataSetDataGridView.RowCount;
+            for (var i = 0; i < m - 1; i++)
+            {
+                var removed = dataItemTableDataGridView[2, i].Value.ToBoolean();
+
+                var entry = new ShdrDataSetEntry();
+                entry.Key = dataItemDataSetDataGridView[0, i].Value.ToString();
+
+                if (!removed) entry.Value = dataItemDataSetDataGridView[1, i].Value.ToString();
+                else entry.Removed = removed;
+
+                entries.Add(entry);
+            }
+
+            var dataSet = new ShdrDataSet();
+            dataSet.DataItemKey = dataItemKey;
+            dataSet.Entries = entries;
+
+            if (_adapter != null)
+            {
+                _adapter.AddDataSet(dataSet);
+                _adapter.SendCurrent();
+            }
+        }
+
+        private void SendTableDataItem()
+        {
+            var dataItemKey = sampleValueDataItemKeyTextBox.Text;
+
+            var entries = new List<ShdrTableEntry>();
+            var m = dataItemTableDataGridView.RowCount;
+            for (var i = 0; i < m - 1; i++)
+            {
+                var removed = dataItemTableDataGridView[4, i].Value.ToBoolean();
+
+                var entry = new ShdrTableEntry();
+                entry.Key = dataItemTableDataGridView[0, i].Value.ToString();
+
+                if (!removed) entry.Cells = (IEnumerable<ShdrTableCell>)dataItemTableDataGridView[3, i].Value;
+                else entry.Removed = removed;
+
+                entries.Add(entry);
+            }
+
+            var table = new ShdrTable();
+            table.DataItemKey = dataItemKey;
+            table.Entries = entries;
+
+            if (_adapter != null)
+            {
+                _adapter.AddTable(table);
+                _adapter.SendCurrent();
+            }
+        }
+
+        private void SendTimeSeriesDataItem()
+        {
+            var dataItemKey = sampleValueDataItemKeyTextBox.Text;
+
+            var sampleRate = dataItemTimeSeriesSampleRateNumeric.Value.ToDouble();
+
+            var samples = new List<double>();
+            var m = dataItemTimeSeriesDataGridView.RowCount;
+            for (var i = 0; i < m - 1; i++)
+            {
+                var sample = dataItemTimeSeriesDataGridView[0, i].Value.ToDouble();
+                samples.Add(sample);
+            }
+
+            var timeSeries = new ShdrTimeSeries();
+            timeSeries.DataItemKey = dataItemKey;
+            timeSeries.SampleRate = sampleRate;
+            timeSeries.Samples = samples;
+
+            if (_adapter != null)
+            {
+                _adapter.AddTimeSeries(timeSeries);
+                _adapter.SendCurrent();
+            }
+        }
+
         private void assetSendButton_Click(object sender, EventArgs e)
         {
             var assetId = assetIdTextBox.Text;
-            var assetType = assetTypeTextBox.Text;
+            var assetType = assetTypeComboBox.Text;
             var assetBody = assetBodyTextBox.Text;
 
             if (_adapter != null)
@@ -283,31 +381,6 @@ namespace WinFormsApp2
                     _adapter.SendAsset(asset);
                 }
             }
-        }
-
-        private void dataSetSendButton_Click(object sender, EventArgs e)
-        {
-            //var dataItemKey = dataSetDataItemKeyTextBox.Text;
-
-            //var entries = new List<ShdrDataSetEntry>();
-            //var m = dataSetDataGridView.RowCount;
-            //for (var i = 0; i < m - 1; i++)
-            //{
-            //    var entry = new ShdrDataSetEntry();
-            //    entry.Key = dataSetDataGridView[0, i].Value.ToString();
-            //    entry.Value = dataSetDataGridView[1, i].Value.ToString();
-            //    entries.Add(entry);
-            //}
-
-            //var dataSet = new ShdrDataSet();
-            //dataSet.DataItemKey = dataItemKey;
-            //dataSet.Entries = entries;
-
-            //if (_adapter != null)
-            //{
-            //    _adapter.AddDataSet(dataSet);
-            //    _adapter.SendCurrent();
-            //}
         }
 
 
@@ -332,6 +405,24 @@ namespace WinFormsApp2
         private void SelectDataItem(string dataItemId)
         {
             _selectedDataItem = null;
+            dataItemNotSelectedPanel.SendToBack();
+
+            // Result
+            dataItemResultComboBox.Text = null;
+            dataItemValueDescriptionTextBox.Text = null;
+
+            // Condition
+            dataItemConditionLevelComboBox.Text = null;
+            dataItemConditionLevelDescriptionTextBox.Text = null;
+            dataItemConditionNativeCodeTextBox.Text = null;
+            dataItemConditionNativeSeverityTextBox.Text = null;
+            dataItemConditionQualifierComboBox.Text = null;
+
+            // DataItem
+            dataItemDataSetDataGridView.Rows.Clear();
+
+            // TimeSeries
+            dataItemTimeSeriesDataGridView.Rows.Clear();
 
             var dataItem = _dataItems.GetValueOrDefault(dataItemId);
             if (dataItem != null)
@@ -350,17 +441,16 @@ namespace WinFormsApp2
 
                 switch (dataItem.Category)
                 {
-                    case MTConnect.Devices.DataItems.DataItemCategory.CONDITION:
+                    case DataItemCategory.CONDITION:
                         dataItemConditionPanel.BringToFront();
                         break;
 
-                    case MTConnect.Devices.DataItems.DataItemCategory.EVENT:
-                        dataItemValuePanel.BringToFront();
-                        LoadDataItemValues(dataItem);
+                    case DataItemCategory.EVENT:
+                        LoadDataItemRepresentation(dataItem);
                         break;
 
-                    case MTConnect.Devices.DataItems.DataItemCategory.SAMPLE:
-                        dataItemValuePanel.BringToFront();
+                    case DataItemCategory.SAMPLE:
+                        LoadDataItemRepresentation(dataItem);
                         break;               
                 }
             }
@@ -368,20 +458,55 @@ namespace WinFormsApp2
             sampleValueDataItemKeyTextBox.Text = dataItemId;
         }
 
+        private void LoadDataItemRepresentation(IDataItem dataItem)
+        {
+            if (dataItem != null)
+            {
+                switch (dataItem.Representation)
+                {
+                    case DataItemRepresentation.VALUE:
+                        dataItemValuePanel.BringToFront();
+                        LoadDataItemValues(dataItem);
+                        break;
+
+                    case DataItemRepresentation.DATA_SET:
+                        dataItemDataSetPanel.BringToFront();
+                        break;
+
+                    case DataItemRepresentation.TABLE:
+                        dataItemTablePanel.BringToFront();
+                        break;
+
+                    case DataItemRepresentation.TIME_SERIES:
+                        dataItemTimeSeriesPanel.BringToFront();
+                        break;
+                }
+            }
+        }
+
         private void LoadDataItemValues(IDataItem dataItem)
         {
-            var values = GetValueText(dataItem.Type, dataItem.SubType);
-            if (!values.IsNullOrEmpty())
+            var values = new List<string>();
+
+            var typeValues = GetValueText(dataItem.Type, dataItem.SubType);
+            if (!typeValues.IsNullOrEmpty())
             {
-                foreach (var value in values)
+                foreach (var value in typeValues)
                 {
-                    dataItemResultComboBox.Items.Add(value);
+                    values.Add(value);
                 }
             }
 
             if (dataItem.Type != AvailabilityDataItem.TypeId)
             {
-                dataItemResultComboBox.Items.Add(Observation.Unavailable);
+                values.Add(Observation.Unavailable);
+            }
+
+
+            values = values.Distinct().OrderBy(o => o).ToList();
+            foreach (var value in values)
+            {
+                dataItemResultComboBox.Items.Add(value);
             }
         }
 
@@ -456,13 +581,77 @@ namespace WinFormsApp2
 
         private void dataItemLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            var level = dataItemLevelComboBox.SelectedItem?.ToString();
+            var level = dataItemConditionLevelComboBox.SelectedItem?.ToString();
             if (level == ConditionLevel.NORMAL.ToString() || level == ConditionLevel.UNAVAILABLE.ToString())
             {
                 dataItemConditionNativeCodeTextBox.Text = null;
                 dataItemConditionNativeSeverityTextBox.Text = null;
                 dataItemConditionQualifierComboBox.Text = null;
                 dataItemConditionMessageTextBox.Text = null;
+            }
+
+            dataItemConditionLevelDescriptionTextBox.Text = ConditionLevelDescriptions.Get(level.ConvertEnum<ConditionLevel>());
+        }
+
+        private void outputListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            var line = outputListBox.SelectedItem?.ToString();
+            if (!string.IsNullOrEmpty(line))
+            {
+                if (e.KeyCode == Keys.C && e.Control)
+                {
+                    Clipboard.SetText(line);
+                }
+            }
+        }
+
+        private void dataItemTableDataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            var rowIndex = e.RowIndex;
+            var cellIndex = e.ColumnIndex;
+
+            if (cellIndex == 1)
+            {
+                var entryKey = dataItemTableDataGridView[0, rowIndex].Value?.ToString();
+                if (!string.IsNullOrEmpty(entryKey))
+                {
+                    var dialog = new EditTableDialog(entryKey);
+                    dialog.ShowDialog();
+                }
+            }
+        }
+
+        private void dataItemTableDataGridView_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        {
+            //if (e.RowIndex > 0)
+            //{
+            //    dataItemTableDataGridView[1, e.RowIndex].Value = "Double click to Edit..";
+            //}
+        }
+
+        private void dataItemTableDataGridView_DefaultValuesNeeded(object sender, DataGridViewRowEventArgs e)
+        {
+            e.Row.Cells[1].Value = "Double click to Edit..";
+            e.Row.Cells[1].Style.BackColor = Color.White;
+        }
+
+        public void UpdateTableEntry(string entryKey, IEnumerable<ShdrTableCell> cells)
+        {
+            if (!string.IsNullOrEmpty(entryKey) && !cells.IsNullOrEmpty())
+            {
+                if (dataItemTableDataGridView.Rows.Count > 0)
+                {
+                    for (var i = 0; i < dataItemTableDataGridView.Rows.Count; i++)
+                    {
+                        var key = dataItemTableDataGridView[0, i].Value?.ToString();
+                        if (key == entryKey)
+                        {
+                            dataItemTableDataGridView[2, i].Value = cells.Count();
+                            dataItemTableDataGridView[3, i].Value = cells;
+                            break;
+                        }
+                    }
+                }
             }
         }
     }

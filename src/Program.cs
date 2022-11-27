@@ -1,12 +1,18 @@
-namespace WinFormsApp2
+namespace MTConnect.Applications.SHDR_Tool
 {
     internal static class Program
     {
+        public static MainForm MainForm { get; set; }
+
+
         [STAThread]
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+
+            var mainForm = new MainForm();
+            MainForm = mainForm;
+            Application.Run(mainForm);
         }
     }
 }
