@@ -300,7 +300,7 @@ namespace MTConnect.Applications.SHDR_Tool
             var m = dataItemDataSetDataGridView.RowCount;
             for (var i = 0; i < m - 1; i++)
             {
-                var removed = dataItemTableDataGridView[2, i].Value.ToBoolean();
+                var removed = dataItemDataSetDataGridView[2, i].Value.ToBoolean();
 
                 var entry = new ShdrDataSetEntry();
                 entry.Key = dataItemDataSetDataGridView[0, i].Value.ToString();
