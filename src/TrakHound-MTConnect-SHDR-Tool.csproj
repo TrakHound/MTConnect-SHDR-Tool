@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup Condition="'$(Configuration)'=='Debug'">
-		<TargetFrameworks>net6.0-windows</TargetFrameworks>
+		<TargetFrameworks>net8.0-windows</TargetFrameworks>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)'=='Release'">
-		<TargetFrameworks>net461;net462;net47;net471;net472;net48;net6.0-windows</TargetFrameworks>
+		<TargetFrameworks>net461;net462;net47;net471;net472;net48;net8.0-windows</TargetFrameworks>
 		<Optimize>true</Optimize>
 	</PropertyGroup>
 
@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MTConnect.NET-SHDR" Version="4.5.0" />
+    <PackageReference Include="MTConnect.NET-SHDR" Version="6.7.0" />
     <PackageReference Include="System.Resources.Extensions" Version="7.0.0" />
   </ItemGroup>
 

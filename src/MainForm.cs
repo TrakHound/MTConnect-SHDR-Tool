@@ -1,32 +1,35 @@
-using MTConnect.Adapters.Shdr;
-using MTConnect.Clients.Rest;
+using MTConnect.Adapters;
+using MTConnect.Clients;
 using MTConnect.Devices;
 using MTConnect.Devices.DataItems;
-using MTConnect.Devices.DataItems.Events;
+using MTConnect.Devices.Components;
 using MTConnect.Formatters;
+using MTConnect.Interfaces;
 using MTConnect.Observations;
-using MTConnect.Observations.Events.Values;
+using MTConnect.Observations.Events;
 using MTConnect.Shdr;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using System.Drawing;
 
 namespace MTConnect.Applications.SHDR_Tool
 {
     public partial class MainForm : Form
     {
         delegate void AgentConnectionDelegate(object sender, string message);
-        delegate void AdapterLineDelegate(object sender, AdapterEventArgs args);
+        delegate void AdapterLineDelegate(object sender, AdapterEventArgs<string> args);
 
         bool connected;
-        MTConnectClient _client;
+        MTConnectHttpClient _client;
         ShdrAdapter _adapter;
         IDevice _device;
         Dictionary<string, IDataItem> _dataItems = new Dictionary<string, IDataItem>();
         IDataItem _selectedDataItem;
+        bool _filterDuplicates;
+        bool _outputTimestamps;
 
 
         public MainForm()
@@ -35,6 +38,9 @@ namespace MTConnect.Applications.SHDR_Tool
 
             connectionStatusLabel.Text = "Not Connected";
             disconnectedPanel.BringToFront();
+
+            filterDuplicatesCheckBox.Checked = true;
+            outputTimestampCheckBox.Checked = true;
         }
 
         private async void LoadDevices()
@@ -177,7 +183,9 @@ namespace MTConnect.Applications.SHDR_Tool
             if (!connected)
             {
                 if (_adapter != null) _adapter.Stop();
-                _adapter = new ShdrAdapter(hostname, port);
+                _adapter = new ShdrAdapter(port);
+                _adapter.FilterDuplicates = _filterDuplicates;
+                _adapter.OutputTimestamps = _outputTimestamps;
                 _adapter.AgentConnected += AgentConnected;
                 _adapter.AgentDisconnected += AgentDisonnected;
                 _adapter.LineSent += AdapterLineSent;
@@ -201,13 +209,16 @@ namespace MTConnect.Applications.SHDR_Tool
             var host = hostnameTextBox.Text;
             var port = httpPortTextBox.Text.ToInt();
 
-            _client = new MTConnectClient($"{host}:{port}");
+            _client = new MTConnectHttpClient($"{host}:{port}");
             LoadDevices();
 
             connectionStatusLabel.Text = "Connected";
             connectButton.Text = "Disconnect";
             disconnectedPanel.SendToBack();
             connected = true;
+
+            filterDuplicatesCheckBox.Enabled = false;
+            outputTimestampCheckBox.Enabled = false;
         }
 
         private void AgentDisonnected(object sender, string hostname)
@@ -224,9 +235,12 @@ namespace MTConnect.Applications.SHDR_Tool
             connectButton.Text = "Connect";
             disconnectedPanel.BringToFront();
             connected = false;
+
+            filterDuplicatesCheckBox.Enabled = true;
+            outputTimestampCheckBox.Enabled = true;
         }
 
-        private void AdapterLineSent(object sender, AdapterEventArgs args)
+        private void AdapterLineSent(object sender, AdapterEventArgs<string> args)
         {
             if (InvokeRequired)
             {
@@ -234,7 +248,7 @@ namespace MTConnect.Applications.SHDR_Tool
                 return;
             }
 
-            outputListBox.Items.Insert(0, args.Message);
+            outputListBox.Items.Insert(0, args.Data);
         }
 
 
@@ -271,7 +285,7 @@ namespace MTConnect.Applications.SHDR_Tool
             var result = dataItemResultComboBox.Text;
 
             _adapter.AddDataItem(dataItemKey, result);
-            _adapter.SendCurrent();
+            _adapter.SendChanged();
         }
 
         private void SendConditionDataItem()
@@ -289,7 +303,7 @@ namespace MTConnect.Applications.SHDR_Tool
 
             condition.AddFaultState(faultState);
             _adapter.AddCondition(condition);
-            _adapter.SendCurrent();
+            _adapter.SendChanged();
         }
 
         private void SendDataSetDataItem()
@@ -318,7 +332,7 @@ namespace MTConnect.Applications.SHDR_Tool
             if (_adapter != null)
             {
                 _adapter.AddDataSet(dataSet);
-                _adapter.SendCurrent();
+                _adapter.SendChanged();
             }
         }
 
@@ -348,7 +362,7 @@ namespace MTConnect.Applications.SHDR_Tool
             if (_adapter != null)
             {
                 _adapter.AddTable(table);
-                _adapter.SendCurrent();
+                _adapter.SendChanged();
             }
         }
 
@@ -374,7 +388,7 @@ namespace MTConnect.Applications.SHDR_Tool
             if (_adapter != null)
             {
                 _adapter.AddTimeSeries(timeSeries);
-                _adapter.SendCurrent();
+                _adapter.SendChanged();
             }
         }
 
@@ -384,20 +398,20 @@ namespace MTConnect.Applications.SHDR_Tool
             var assetType = assetTypeComboBox.Text;
             var assetBody = assetBodyTextBox.Text;
 
-            if (_adapter != null)
-            {
-                var bodyBytes = Encoding.ASCII.GetBytes(assetBody);
+            //if (_adapter != null)
+            //{
+            //    var bodyBytes = Encoding.ASCII.GetBytes(assetBody);
 
-                var assetResult = EntityFormatter.CreateAsset(DocumentFormat.XML, assetType, bodyBytes);
-                if (assetResult.Success)
-                {
-                    var asset = assetResult.Entity;
-                    asset.AssetId = assetId;
-                    asset.Timestamp = UnixDateTime.Now;
+            //    var assetResult = EntityFormatter.CreateAsset(DocumentFormat.XML, assetType, bodyBytes);
+            //    if (assetResult.Success)
+            //    {
+            //        var asset = assetResult.Entity;
+            //        asset.AssetId = assetId;
+            //        asset.Timestamp = UnixDateTime.Now;
 
-                    _adapter.SendAsset(asset);
-                }
-            }
+            //        _adapter.SendAsset(asset);
+            //    }
+            //}
         }
 
 
@@ -542,21 +556,21 @@ namespace MTConnect.Applications.SHDR_Tool
 
                     switch (subType.ToUnderscoreUpper().ConvertEnum<CompositionStateDataItem.SubTypes>())
                     {
-                        case CompositionStateDataItem.SubTypes.ACTION: return Enum.GetNames(typeof(CompositionActionState));
-                        case CompositionStateDataItem.SubTypes.LATERAL: return Enum.GetNames(typeof(CompositionLateralState));
-                        case CompositionStateDataItem.SubTypes.MOTION: return Enum.GetNames(typeof(CompositionMotionState));
-                        case CompositionStateDataItem.SubTypes.SWITCHED: return Enum.GetNames(typeof(CompositionSwitchedState));
-                        case CompositionStateDataItem.SubTypes.VERTICAL: return Enum.GetNames(typeof(CompositionVerticalState));
+                        case CompositionStateDataItem.SubTypes.ACTION: return Enum.GetNames(typeof(CompositionStateAction));
+                        case CompositionStateDataItem.SubTypes.LATERAL: return Enum.GetNames(typeof(CompositionStateLateral));
+                        case CompositionStateDataItem.SubTypes.MOTION: return Enum.GetNames(typeof(CompositionStateMotion));
+                        case CompositionStateDataItem.SubTypes.SWITCHED: return Enum.GetNames(typeof(CompositionStateSwitched));
+                        case CompositionStateDataItem.SubTypes.VERTICAL: return Enum.GetNames(typeof(CompositionStateVertical));
                     }
                     break;
                 case ConnectionStatusDataItem.TypeId: return Enum.GetNames(typeof(ConnectionStatus));
                 case ControllerModeDataItem.TypeId: return Enum.GetNames(typeof(ControllerMode));
-                case ControllerModeOverrideDataItem.TypeId: return Enum.GetNames(typeof(ControllerModeOverrideValue));
+                case ControllerModeOverrideDataItem.TypeId: return Enum.GetNames(typeof(ControllerModeOverride));
                 case DirectionDataItem.TypeId:
                     switch (subType.ToUnderscoreUpper().ConvertEnum<DirectionDataItem.SubTypes>())
                     {
-                        case DirectionDataItem.SubTypes.LINEAR: return Enum.GetNames(typeof(LinearDirection));
-                        case DirectionDataItem.SubTypes.ROTARY: return Enum.GetNames(typeof(RotaryDirection));
+                        case DirectionDataItem.SubTypes.LINEAR: return Enum.GetNames(typeof(DirectionLinear));
+                        case DirectionDataItem.SubTypes.ROTARY: return Enum.GetNames(typeof(DirectionRotary));
                     }
                     break;
                 case DoorStateDataItem.TypeId: return Enum.GetNames(typeof(DoorState));
@@ -565,13 +579,13 @@ namespace MTConnect.Applications.SHDR_Tool
                 case EquipmentModeDataItem.TypeId: return Enum.GetNames(typeof(EquipmentMode));
                 case ExecutionDataItem.TypeId: return Enum.GetNames(typeof(Execution));
                 case FunctionalModeDataItem.TypeId: return Enum.GetNames(typeof(FunctionalMode));
-                case InterfaceStateDataItem.TypeId: return Enum.GetNames(typeof(InterfaceState));
+                case InterfaceStateDataItem.TypeId: return Enum.GetNames(typeof(Observations.Events.InterfaceState));
                 case LockStateDataItem.TypeId: return Enum.GetNames(typeof(LockState));
                 case PartDetectDataItem.TypeId: return Enum.GetNames(typeof(PartDetect));
                 case PartProcessingStateDataItem.TypeId: return Enum.GetNames(typeof(PartProcessingState));
                 case PartStatusDataItem.TypeId: return Enum.GetNames(typeof(PartStatus));
                 case PathModeDataItem.TypeId: return Enum.GetNames(typeof(PathMode));
-                case PowerStateDataItem.TypeId: return Enum.GetNames(typeof(MTConnect.Observations.Events.Values.PowerState));
+                case PowerStateDataItem.TypeId: return Enum.GetNames(typeof(Observations.Events.PowerState));
                 case ProcessStateDataItem.TypeId: return Enum.GetNames(typeof(ProcessState));
                 case ProgramLocationTypeDataItem.TypeId: return Enum.GetNames(typeof(ProgramLocationType));
                 case RotaryModeDataItem.TypeId: return Enum.GetNames(typeof(RotaryMode));
@@ -599,7 +613,7 @@ namespace MTConnect.Applications.SHDR_Tool
         private void dataItemLevelComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             var level = dataItemConditionLevelComboBox.SelectedItem?.ToString();
-            if (level == ConditionLevel.NORMAL.ToString() || level == ConditionLevel.UNAVAILABLE.ToString())
+            if (level == ConditionLevel.UNAVAILABLE.ToString())
             {
                 dataItemConditionNativeCodeTextBox.Text = null;
                 dataItemConditionNativeSeverityTextBox.Text = null;
@@ -670,6 +684,18 @@ namespace MTConnect.Applications.SHDR_Tool
                     }
                 }
             }
+        }
+
+        private void filterDuplicatesCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            var control = (CheckBox)sender;
+            _filterDuplicates = control.Checked;
+        }
+
+        private void outputTimestampsCheckBoxCheckedChanged(object sender, EventArgs e)
+        {
+            var control = (CheckBox)sender;
+            _outputTimestamps = control.Checked;
         }
     }
 }

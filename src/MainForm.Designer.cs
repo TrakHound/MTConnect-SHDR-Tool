@@ -31,8 +31,8 @@ namespace MTConnect.Applications.SHDR_Tool
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -101,6 +101,8 @@ namespace MTConnect.Applications.SHDR_Tool
             this.disconnectedPanel = new System.Windows.Forms.Panel();
             this.label7 = new System.Windows.Forms.Label();
             this.deviceComboBox = new System.Windows.Forms.ComboBox();
+            this.filterDuplicatesCheckBox = new System.Windows.Forms.CheckBox();
+            this.outputTimestampCheckBox = new System.Windows.Forms.CheckBox();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.dataItemTablePanel.SuspendLayout();
@@ -186,9 +188,9 @@ namespace MTConnect.Applications.SHDR_Tool
             // cellsColumn
             // 
             this.cellsColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
-            this.cellsColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.cellsColumn.DefaultCellStyle = dataGridViewCellStyle3;
             this.cellsColumn.HeaderText = "Cells";
             this.cellsColumn.Name = "cellsColumn";
             this.cellsColumn.ReadOnly = true;
@@ -196,8 +198,8 @@ namespace MTConnect.Applications.SHDR_Tool
             // 
             // cellCountColumn
             // 
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            this.cellCountColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            this.cellCountColumn.DefaultCellStyle = dataGridViewCellStyle4;
             this.cellCountColumn.HeaderText = "#";
             this.cellCountColumn.Name = "cellCountColumn";
             this.cellCountColumn.ReadOnly = true;
@@ -764,6 +766,8 @@ namespace MTConnect.Applications.SHDR_Tool
             // 
             // disconnectedPanel
             // 
+            this.disconnectedPanel.Controls.Add(this.outputTimestampCheckBox);
+            this.disconnectedPanel.Controls.Add(this.filterDuplicatesCheckBox);
             this.disconnectedPanel.Controls.Add(this.outputListBox);
             this.disconnectedPanel.Controls.Add(this.label7);
             this.disconnectedPanel.Location = new System.Drawing.Point(12, 49);
@@ -790,6 +794,28 @@ namespace MTConnect.Applications.SHDR_Tool
             this.deviceComboBox.Size = new System.Drawing.Size(164, 23);
             this.deviceComboBox.TabIndex = 1;
             this.deviceComboBox.SelectedIndexChanged += new System.EventHandler(this.deviceComboBox_SelectedIndexChanged);
+            // 
+            // filterDuplicatesCheckBox
+            // 
+            this.filterDuplicatesCheckBox.AutoSize = true;
+            this.filterDuplicatesCheckBox.Location = new System.Drawing.Point(191, 7);
+            this.filterDuplicatesCheckBox.Name = "filterDuplicatesCheckBox";
+            this.filterDuplicatesCheckBox.Size = new System.Drawing.Size(110, 19);
+            this.filterDuplicatesCheckBox.TabIndex = 3;
+            this.filterDuplicatesCheckBox.Text = "Filter Duplicates";
+            this.filterDuplicatesCheckBox.UseVisualStyleBackColor = true;
+            this.filterDuplicatesCheckBox.CheckedChanged += new System.EventHandler(this.filterDuplicatesCheckBoxCheckedChanged);
+            // 
+            // outputTimestampCheckBox
+            // 
+            this.outputTimestampCheckBox.AutoSize = true;
+            this.outputTimestampCheckBox.Location = new System.Drawing.Point(335, 7);
+            this.outputTimestampCheckBox.Name = "outputTimestampCheckBox";
+            this.outputTimestampCheckBox.Size = new System.Drawing.Size(131, 19);
+            this.outputTimestampCheckBox.TabIndex = 4;
+            this.outputTimestampCheckBox.Text = "Output Timestamps";
+            this.outputTimestampCheckBox.UseVisualStyleBackColor = true;
+            this.outputTimestampCheckBox.CheckedChanged += new System.EventHandler(this.outputTimestampsCheckBoxCheckedChanged);
             // 
             // MainForm
             // 
@@ -906,5 +932,7 @@ namespace MTConnect.Applications.SHDR_Tool
         private DataGridViewTextBoxColumn cellCountColumn;
         private DataGridViewTextBoxColumn cellValuesColumn;
         private DataGridViewCheckBoxColumn dataGridViewCheckBoxColumn1;
+        private CheckBox filterDuplicatesCheckBox;
+        private CheckBox outputTimestampCheckBox;
     }
 }
